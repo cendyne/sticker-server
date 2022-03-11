@@ -131,3 +131,4 @@ dist
 
 # Databases
 *.sqlite3
+files

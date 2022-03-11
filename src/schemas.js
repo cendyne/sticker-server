@@ -18,6 +18,8 @@ const artistSchema = {
   }
 };
 
+const stickerFilePathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-]{3,}\.(gif|avif|jpe?g|png|webp|jxl|svg)/;
+
 const stickerFileSchema = {
   content_type: {
     matches: {
@@ -31,7 +33,7 @@ const stickerFileSchema = {
       // file/1/whatever.jpeg - no match (size too small)
       // file/10000/whatever.jpeg - no match (size too small)
       // file/256/whatever.pdf - no match (extenision is not supported)
-      options: /file\/[0-9]{2,4}\/[a-z0-9_\-]{3,}\.(gif|avif|jpe?g|png|webp|jxl|svg)/
+      options: stickerFilePathRegex
     }
   },
   size: {
@@ -67,5 +69,6 @@ const stickerSchema = {
 module.exports = {
   artistSchema,
   stickerFileSchema,
-  stickerSchema
+  stickerSchema,
+  stickerFilePathRegex
 }
