@@ -16,9 +16,11 @@ exports.up = function(knex) {
         table.foreign('sticker_id').references('id').inTable('sticker');
         table.string('content_type', 255).notNullable();
         table.string('source',255).notNullable();
-        table.string('size', 10).notNullable();
+        table.integer('size').notNullable();
         
-        table.index(['sticker_id', 'size'], 'sticker_id_size');
+        table.unique(['sticker_id', 'size', 'content_type'], {
+            indexName: 'sticker_id_size_content'
+        });
     });
 };
 
