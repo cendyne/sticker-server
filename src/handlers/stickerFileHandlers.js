@@ -76,6 +76,10 @@ async function notFoundHandler(ext, res, next) {
     res.status(404);
     res.sendFile(fullPath, {
       maxAge: 60_000
+    }, (err) => {
+      if (err) {
+        next();
+      }
     });
     return;
   }
