@@ -364,7 +364,9 @@ async function uploadStickerFileHandler (req, res) {
     // One hour for a file should be enough under normal circumstances
     maxAge: 3_600_000
   }, async (err) => {
-    return await notFoundHandler(filePathExt, res, next);
+    if (err) {
+      return await notFoundHandler(filePathExt, res, next);
+    }
   });
 };
 
