@@ -1,0 +1,11 @@
+files
+.devcontainer
+.gitignore
+.github
+.editorconfig
+node_modules
+cendyne.png
+*.sqlite3
+Dockerfile
+LICENSE.txt
+README.md
