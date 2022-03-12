@@ -73,6 +73,7 @@ async function allStickersHtmlHandler(req, res) {
       for (const file of contentTypes.values()) {
         remainingFiles.push(file);
       }
+      remainingFiles.sort((a, b) => (a.length < b.length) ? -1 : 1);
       matchingSizeSet.sources = remainingFiles;
       delete matchingSizeSet.files;
     }
