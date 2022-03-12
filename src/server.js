@@ -5,9 +5,9 @@ const db = require('./db').knex;
 const fileUpload = require('express-fileupload');
 const {artistSchema, stickerSchema, stickerFileSchema, stickerFilePathRegex} = require('./schemas');
 
-const {uploadStickerFileHandler, upsertStickerFileHandler, findStickerFileResourceHandler} = require('./stickerFileHandlers');
-const {upsertStickerHandler} = require('./stickerHandlers');
-const {upsertArtistHandler} = require('./artistHandlers');
+const {uploadStickerFileHandler, upsertStickerFileHandler, findStickerFileResourceHandler} = require('./handlers/stickerFileHandlers');
+const {upsertStickerHandler} = require('./handlers/stickerHandlers');
+const {upsertArtistHandler} = require('./handlers/artistHandlers');
 
 app.use(express.json());
 

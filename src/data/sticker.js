@@ -1,5 +1,5 @@
-const debug = require('./debug');
-const db = require('./db').knex;
+const debug = require('../debug');
+const db = require('../db').knex;
 
 
 async function findStickerByVanity(vanity) {

@@ -2,8 +2,8 @@
 const {validationResult} = require('express-validator');
 // project
 
-const {findArtistByVanity} = require('./artist');
-const {upsertSticker} = require('./sticker');
+const {findArtistByVanity} = require('../data/artist');
+const {upsertSticker} = require('../data/sticker');
 
 
 async function upsertStickerHandler (req, res) {

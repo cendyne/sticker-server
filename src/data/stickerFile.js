@@ -1,5 +1,5 @@
-const db = require('./db').knex;
-const debug = require('./debug');
+const db = require('../db').knex;
+const debug = require('../debug');
 
 async function findStickerFileById(id) {
   let result = await db('sticker_file').where({id}).select('*');

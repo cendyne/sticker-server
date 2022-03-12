@@ -1,6 +1,6 @@
 const {validationResult} = require('express-validator');
-const db = require('./db').knex;
-const {findArtistByVanity, upsertArtist} = require('./artist');
+const db = require('../db').knex;
+const {upsertArtist} = require('../data/artist');
 
 async function upsertArtistHandler(req, res) {
   const errors = validationResult(req);

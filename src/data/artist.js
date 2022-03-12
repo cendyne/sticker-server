@@ -1,5 +1,5 @@
-const db = require('./db').knex;
-const debug = require('./debug');
+const db = require('../db').knex;
+const debug = require('../debug');
 
 async function findArtistByVanity(vanity) {
   let result = await db('artist').where({vanity}).select('*');
@@ -33,6 +33,7 @@ async function updateArtist(id, name, href) {
   debug('Failed to update artist %d', id)
   return null;
 }
+
 async function insertArtist(vanity, name, href) {
   let result = await db('artist').returning('*').insert({
     vanity,

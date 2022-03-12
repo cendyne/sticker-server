@@ -4,10 +4,10 @@ const fs = require('fs');
 // deps
 const {validationResult} = require('express-validator');
 // project
-const {filePath, staticPath} = require('./paths');
-const {fileRegex} = require('./schemas');
-const {findStickerByVanity} = require('./sticker');
-const {upsertStickerFile} = require('./stickerFile');
+const {filePath, staticPath} = require('../paths');
+const {fileRegex} = require('../schemas');
+const {findStickerByVanity} = require('../data/sticker');
+const {upsertStickerFile} = require('../data/stickerFile');
 
 const md5File = async (fullPath) => {
   const fileBuffer = await fs.promises.readFile(fullPath);
