@@ -21,14 +21,12 @@ function checkToken(req, res, next) {
       pass = crypto.timingSafeEqual(token, token) & false;
     }
     if (!pass) {
-      console.log("Fail")
       res.status(401).json({ errors: [
         {
           "msg": "Invalid Authorization",
         }
       ]});
     } else {
-      console.log("Success")
       next();
     }
   }

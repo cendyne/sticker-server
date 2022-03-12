@@ -210,7 +210,6 @@ async function upsertStickerFileHandler (req, res) {
  * @param {import('express').Response} res
  */
 async function uploadStickerFileHandler (req, res) {
-
   let source = req.url.substring(1);
   let fmatch = source.match(fileRegex);
   if (!fmatch) {

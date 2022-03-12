@@ -133,3 +133,4 @@ dist
 *.sqlite3
 files
 .DS_Store
+temp

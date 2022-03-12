@@ -5,6 +5,7 @@ if (filePath.endsWith('/')) {
   filePath = filePath.slice(0, -1);
 }
 filePath = path.resolve(...filePath.split('/'))
+console.log('File path:', filePath)
 
 module.exports = {
   filePath,
