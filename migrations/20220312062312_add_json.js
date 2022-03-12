@@ -9,7 +9,6 @@ exports.up = function(knex) {
       let subquery = knex('sticker_file').orderBy('sticker_id', 'size', 'content_type').select('*');
       view.columns(['sticker_id', 'files']);
       view.as(knex(subquery)
-        .join('sticker', 'artist.id', '=', 'sticker.artist_id')
         .orderBy(['sticker_id'])
         .groupBy('sticker_id')
         .select(knex.raw('sticker_id, json_group_array(json_object(\'size\', size, \'content_type\', content_type, \'source\', source, \'length\', length)) as files')));
