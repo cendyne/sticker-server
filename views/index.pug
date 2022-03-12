@@ -1,0 +1,22 @@
+html
+  head
+    title All Stickers
+    link(rel="stylesheet", href="dejavu-fonts/regular.css")
+    link(rel="stylesheet", href="main.css")
+  body
+    .container
+      h1 All Stickers
+      each artist in artists
+        h2
+          a(href=artist.href)
+            =artist.name
+        .gallery
+          each sticker in artist.stickers
+            .gallery-item(data-vanity=sticker.vanity)
+              picture
+                each source in sticker.sizes[sticker.largest_size].sources
+                  source(type=source.content_type, srcset=`/${source.source}`)
+                img(alt=sticker.vanity, src=`/${sticker.sizes[sticker.largest_size].primary.source}`, loading="lazy")
+              .gallery-label= sticker.vanity
+    script(src="main.js", type="application/javascript")
+
