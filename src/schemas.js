@@ -1,7 +1,7 @@
 const artistSchema = {
   vanity: {
     matches: {
-      options: /[a-z0-9_\-]{3,}/
+      options: /[a-z0-9_\-+]{3,}/
     }
   },
   name: {
@@ -18,9 +18,9 @@ const artistSchema = {
   }
 };
 
-const stickerFilePathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-]{3,}\.(gif|avif|jpe?g|png|webp|jxl|svg)/;
-const stickerFileInfoPathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-]{3,}\.json/;
-const stickerInfoPathRegex = /\/?sticker\/[a-z0-9_\-]{3,}\.json/
+const stickerFilePathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-+]{3,}\.(gif|avif|jpe?g|png|webp|jxl|svg)/;
+const stickerFileInfoPathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-+]{3,}\.json/;
+const stickerInfoPathRegex = /\/?sticker\/[a-z0-9_\-+]{3,}\.json/
 const fileRegex = /file\/([^/]+)\/([^.]+)\.(gif|avif|jpe?g|png|webp|jxl|svg)/;
 
 const stickerFileSchema = {
@@ -51,7 +51,7 @@ const stickerFileSchema = {
   // would have to do that in the handler
   sticker_vanity: {
     matches: {
-      options: /[a-z0-9_\-]{1,}/
+      options: /[a-z0-9_\-+]{1,}/
     }
   }
 };
@@ -59,12 +59,12 @@ const stickerFileSchema = {
 const stickerSchema = {
   vanity: {
     matches: {
-      options: /[a-z0-9_\-]{1,}/
+      options: /[a-z0-9_\-+]{1,}/
     }
   },
   artist_vanity: {
     matches: {
-      options: /[a-z0-9_\-]{3,}/
+      options: /[a-z0-9_\-+]{3,}/
     }
   }
 }
