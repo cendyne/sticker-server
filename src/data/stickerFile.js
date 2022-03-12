@@ -60,6 +60,7 @@ async function insertStickerFile(sticker_id, content_type, size, source, length,
 }
 
 async function upsertStickerFile(sticker, content_type, size, source, length, md5) {
+  debug('upsert sticker %d %s %d %s %d %s', sticker.id, content_type, size, source, length, md5);
   let stickerFile = await findStickerFile(sticker.id, content_type, size)
   if (stickerFile) {
     debug('Upsert found sticker file %d, therefore updating', stickerFile.id);

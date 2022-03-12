@@ -1,15 +1,18 @@
 const express = require('express');
 const { checkSchema } = require('express-validator');
+const bearerToken = require('express-bearer-token');
 const app = express();
-const db = require('./db').knex;
 const fileUpload = require('express-fileupload');
+const {checkToken} = require('./token')
 const {artistSchema, stickerSchema, stickerFileSchema, stickerFilePathRegex} = require('./schemas');
 
 const {uploadStickerFileHandler, upsertStickerFileHandler, findStickerFileResourceHandler} = require('./handlers/stickerFileHandlers');
 const {upsertStickerHandler} = require('./handlers/stickerHandlers');
 const {upsertArtistHandler} = require('./handlers/artistHandlers');
+const {allStickersJsonHandler, allStickersHtmlHandler} = require('./handlers/allStickersHandler');
 
 app.use(express.json());
+app.use(bearerToken());
 
 app.use(fileUpload({
   limits: {
@@ -17,25 +20,23 @@ app.use(fileUpload({
   },
   abortOnLimit: true
 }));
+app.disable('x-powered-by');
+app.set('view engine', 'pug')
 
 
-app.get('/', async (req, res) => {
-  // TODO extract count
-  let n = 0;
-  n = (await db('sticker').count('id'))[0]['count(`id`)'];
-  console.log("n", n)
+app.get('/', allStickersHtmlHandler);
+app.get('/.json', allStickersJsonHandler);
 
-  res.send(`There are ${n} stickers`)
-});
-
-app.put('/artist', checkSchema(artistSchema), upsertArtistHandler);
-app.put('/sticker', checkSchema(stickerSchema), upsertStickerHandler);
-app.put('/sticker-file', checkSchema(stickerFileSchema), upsertStickerFileHandler);
+app.put('/artist', checkToken, checkSchema(artistSchema), upsertArtistHandler);
+app.put('/sticker', checkToken, checkSchema(stickerSchema), upsertStickerHandler);
+app.put('/sticker-file', checkToken, checkSchema(stickerFileSchema), upsertStickerFileHandler);
 // No schema, these are file uploads
-app.put(stickerFilePathRegex, uploadStickerFileHandler);
-app.post(stickerFilePathRegex, uploadStickerFileHandler);
+app.put(stickerFilePathRegex, checkToken, uploadStickerFileHandler);
+app.post(stickerFilePathRegex, checkToken, uploadStickerFileHandler);
 
 // Send sticker files back
 app.get(stickerFilePathRegex, findStickerFileResourceHandler);
+
+app.use(express.static('static'))
 
 module.exports = app

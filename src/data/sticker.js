@@ -1,6 +1,7 @@
 const debug = require('../debug');
 const db = require('../db').knex;
 
+// TODO tag stickers
 
 async function findStickerByVanity(vanity) {
   let result = await db('sticker').where({vanity}).select('*');
@@ -20,6 +21,7 @@ async function findStickerById(id) {
   debug('Could not find sticker by id %d', id);
   return null;
 }
+
 async function updateSticker(id, artist_id) {
   let result = await db('sticker').where({id}).update({
     artist_id
