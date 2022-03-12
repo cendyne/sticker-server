@@ -132,3 +132,4 @@ dist
 # Databases
 *.sqlite3
 files
+.DS_Store

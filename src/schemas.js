@@ -19,6 +19,9 @@ const artistSchema = {
 };
 
 const stickerFilePathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-]{3,}\.(gif|avif|jpe?g|png|webp|jxl|svg)/;
+const stickerFileInfoPathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-]{3,}\.json/;
+const stickerInfoPathRegex = /\/?sticker\/[a-z0-9_\-]{3,}\.json/
+const fileRegex = /file\/([^/]+)\/([^.]+)\.(gif|avif|jpe?g|png|webp|jxl|svg)/;
 
 const stickerFileSchema = {
   content_type: {
@@ -70,5 +73,8 @@ module.exports = {
   artistSchema,
   stickerFileSchema,
   stickerSchema,
-  stickerFilePathRegex
+  stickerFilePathRegex,
+  stickerFileInfoPathRegex,
+  stickerInfoPathRegex,
+  fileRegex
 }
