@@ -1,0 +1,41 @@
+body {
+  color: #f6f3ed;
+  font-family: 'DejaVu Sans', Georgia, serif;
+  font-size: 11pt;
+  margin: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  overflow-x: hidden;
+  --cendyne-hide-dark: #2e1e17;
+  --cendyne-hide: #3f2e26;
+  --cendyne-hide-lighter: #755048;
+  --cendyne-hide-light: #875950;
+  --cendyne-belly: #f6f3ed;
+  --cendyne-pattern: #f7b2a9;
+  --cendyne-pattern-light: #f8b3aa;
+  --cendyne-trim: #deb836;
+  --cendyne-eyes: #4cabc7;
+  --cendyne-eyes-light: #66D9EF;
+  background: var(--cendyne-hide);
+}
+h1 a, h1, h2 a, h2, h3 a, h3, h4 a, h4, h5 a, h5 {
+  color: var(--cendyne-trim);
+}
+.container {
+  max-width: 65em;
+  margin: auto;
+}
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+.gallery-item img {
+  max-width: 256px;
+  max-height: 256px;
+  cursor: pointer;
+}
+.gallery-label {
+  text-align: center;
+  font-weight: bold;
+  color: var(--cendyne-pattern);
+}
