@@ -9,7 +9,7 @@ async function findAllStickers() {
 }
 async function findAllStickersAndFiles() {
   debug('Loading all stickers');
-  let results = await db('artists_stickers_files').select('*');
+  let results = await db('artists_stickers_files').orderBy('sticker_vanity').select('*');
   let output = [];
   for (const row of results) {
     let files = row.files;
