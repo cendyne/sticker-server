@@ -31,12 +31,31 @@ h1 a, h1, h2 a, h2, h3 a, h3, h4 a, h4, h5 a, h5 {
   gap: 1em;
 }
 .gallery-item img {
-  max-width: 256px;
-  max-height: 256px;
+  max-width: 32px;
+  max-height: 32px;
   cursor: pointer;
 }
 .gallery-label {
   text-align: center;
   font-weight: bold;
   color: var(--cendyne-pattern);
+}
+
+@media (min-width: 800px) {
+  .gallery-item img {
+    max-width: 64px;
+    max-height: 64px;
+  }
+}
+@media (min-width: 1000px) {
+  .gallery-item img {
+    max-width: 128px;
+    max-height: 256px;
+  }
+}
+@media (min-width: 1600px) {
+  .gallery-item img {
+    max-width: 256px;
+    max-height: 256px;
+  }
 }

@@ -14,8 +14,18 @@ html
           each sticker in artist.stickers
             .gallery-item(data-vanity=sticker.vanity)
               picture
-                each source in sticker.sizes[sticker.largest_size].sources
-                  source(type=source.content_type, srcset=`/${source.source}`)
+                each size in sticker.available_sizes
+                  -
+                    var media = ''
+                    if (size >= 256) {
+                      media = '(min-width: 1600px), (-webkit-min-device-pixel-ratio: 2) and (min-width: 1000px)'
+                    } else if (size >= 128) {
+                      media = '(min-width: 1000px), (-webkit-min-device-pixel-ratio: 2) and (min-width: 800px)'
+                    } else if (size >= 64) {
+                      media = '(min-width: 800px), (-webkit-min-device-pixel-ratio: 2) and (min-width: 600px)'
+                    }
+                  each source in sticker.sizes[size].sources
+                    source(type=source.content_type, srcset=`/${source.source}`, sizes=`${size}px`, media=`${media}`)
                 img(alt=sticker.vanity, src=`/${sticker.sizes[sticker.largest_size].primary.source}`, loading="lazy")
               .gallery-label= sticker.vanity
     script(src="main.js", type="application/javascript")

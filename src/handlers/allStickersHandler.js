@@ -16,6 +16,11 @@ async function allStickersJsonHandler(req, res) {
   })
 }
 
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 async function allStickersHtmlHandler(req, res) {
   let results = await findAllStickersAndFiles();
   let artists = {};
@@ -35,7 +40,7 @@ async function allStickersHtmlHandler(req, res) {
     let largest_size = 0;
     for (const file of result.files) {
       const {size, content_type, source, length} = file;
-      if (size > largest_size) {
+      if (size > largest_size ) {
         largest_size = size;
       }
       let sizeSet = sizes[size];
@@ -80,9 +85,11 @@ async function allStickersHtmlHandler(req, res) {
     stickers.push({
       vanity: result.sticker_vanity,
       sizes,
+      available_sizes: Object.keys(sizes).map((n) => parseInt(n)).sort((a, b) => a > b ? -1 : 1),
       largest_size
     })
   }
+  // res.json({artists: Object.values(artists)})
   res.render('index', {artists: Object.values(artists)})
 }
 
