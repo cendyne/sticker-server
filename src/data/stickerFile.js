@@ -24,6 +24,11 @@ async function findStickerFile(sticker_id, content_type, size) {
   debug('Could not find sticker file %d %s %d', sticker_id, content_type, size);
   return null;
 }
+/**
+ *
+ * @param {*} sticker_id
+ * @returns {{length: number, size: number, source: string, content_type: string, id: number}[]}
+ */
 async function findStickerFilesById(sticker_id) {
   return await db('sticker_file').where({
     sticker_id,

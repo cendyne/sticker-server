@@ -76,7 +76,8 @@ async function loadAllStickers() {
       vanity: result.sticker_vanity,
       sizes,
       available_sizes,
-      largest_size: available_sizes.slice(-1)[0]
+      largest_size: available_sizes.slice(-1)[0],
+      url: `${baseUrl}/sticker/${result.sticker_vanity}`
     })
   }
   debug('Index results prepared')

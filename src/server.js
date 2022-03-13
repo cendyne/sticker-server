@@ -8,7 +8,7 @@ const {checkToken} = require('./token')
 const {artistSchema, stickerSchema, stickerFileSchema, stickerFilePathRegex} = require('./schemas');
 
 const {uploadStickerFileHandler, upsertStickerFileHandler, findStickerFileResourceHandler} = require('./handlers/stickerFileHandlers');
-const {upsertStickerHandler, stickerJsonHandler} = require('./handlers/stickerHandlers');
+const {upsertStickerHandler, stickerJsonHandler, stickerHtmlHandler} = require('./handlers/stickerHandlers');
 const {upsertArtistHandler, allArtistsJsonHandler, artistJsonHandler} = require('./handlers/artistHandlers');
 const {allStickersAndArtistsJsonHandler, allStickersHtmlHandler} = require('./handlers/allStickersHandler');
 
@@ -33,6 +33,7 @@ app.put('/artist', checkToken, checkSchema(artistSchema), upsertArtistHandler);
 app.get('/artist.json', allArtistsJsonHandler);
 app.get('/artist/:vanity.json', artistJsonHandler);
 app.put('/sticker', checkToken, checkSchema(stickerSchema), upsertStickerHandler);
+app.get('/sticker/:vanity', stickerHtmlHandler);
 app.get('/sticker/:vanity.json', stickerJsonHandler);
 app.put('/sticker-file', checkToken, checkSchema(stickerFileSchema), upsertStickerFileHandler);
 // No schema, these are file uploads

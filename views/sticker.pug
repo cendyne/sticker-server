@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title=`${vanity} by ${artistName}`
+    link(rel="stylesheet", href=`${baseUrl}/dejavu-fonts/regular.css`)
+    link(rel="stylesheet", href=`${baseUrl}/main.css`)
+    meta(name="viewport", content="width=device-width")
+  body
+    .single-container
+      .single-item
+        picture
+          each source in sources
+            source(type=source.contentType, srcset=source.url)
+          img(alt=vanity, src=`${baseUrl}/${fallbackSource.url}`)
+        .single-label
+          // Have to have a space here
+          =`${vanity} by `
+          a(href=artistHref)=artistName
+        if losslessSource
+          .single-lossless-link(data-url=losslessSource.url)
+            ='Lossless: '
+            code=losslessSource.url
+        .single-other
+          a(href=jsonUrl)=`${vanity}.json`
+
+
+    script(src=`${baseUrl}/single.js`, type="application/javascript")
+

@@ -1,8 +1,9 @@
+doctype html
 html
   head
     title All Stickers
-    link(rel="stylesheet", href="dejavu-fonts/regular.css")
-    link(rel="stylesheet", href="main.css")
+    link(rel="stylesheet", href=`${baseUrl}/dejavu-fonts/regular.css`)
+    link(rel="stylesheet", href=`${baseUrl}/main.css`)
     meta(name="viewport", content="width=device-width")
   body
     .container
@@ -28,6 +29,7 @@ html
                   each source in sticker.sizes.get(size).sources
                     source(type=source.content_type, srcset=`${baseUrl}/${source.source}`, sizes=`${size}px`, media=`${media}`)
                 img(alt=sticker.vanity, src=`${baseUrl}/${sticker.sizes.get(sticker.largest_size).primary.source}`, loading="lazy")
-              .gallery-label= sticker.vanity
-    script(src="main.js", type="application/javascript")
+              .gallery-label
+                a(href=sticker.url)=sticker.vanity
+    script(src=`${baseUrl}/main.js`, type="application/javascript")
 
