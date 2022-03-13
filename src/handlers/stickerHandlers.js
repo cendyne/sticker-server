@@ -143,7 +143,7 @@ async function stickerHtmlHandler(req, res, next) {
   let data = {
     ...(artist ? {
       artistName: artist.name,
-      artistHref: artist.href
+      artistHref: `${baseUrl}/artist/${artist.vanity}`
     } : {}),
     vanity,
     // TODO tags
