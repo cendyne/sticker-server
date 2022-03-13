@@ -108,16 +108,18 @@ async function stickerHtmlHandler(req, res, next) {
   }
   files = files.filter(({size}) => size == largest_size);
   let sources = files.map((file) => {
-    let {content_type, source} = file
+    let {content_type, source, size} = file
     return {
       contentType: content_type,
       url: `${baseUrl}/${source}`,
+      size,
     };
   });
   // This will get replaced of course
   let fallbackSource = {
     contentType: 'image/jpeg',
-    url: `${baseUrl}/not-found.jpg`
+    url: `${baseUrl}/not-found.jpg`,
+    size: 512,
   };
   let losslessSource = null;
   let foundJpeg = sources.find(({contentType}) => contentType == 'image/jpeg');
