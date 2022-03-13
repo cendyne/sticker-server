@@ -1,12 +1,17 @@
 // deps
 const {validationResult} = require('express-validator');
 // project
+const {baseUrl} = require('../paths');
+const {findArtistByVanity, findArtistById} = require('../data/artist');
+const {upsertSticker, findStickerByVanity} = require('../data/sticker');
+const {findStickerFilesById} = require('../data/stickerFile');
 
-const {findArtistByVanity} = require('../data/artist');
-const {upsertSticker} = require('../data/sticker');
-
-
-async function upsertStickerHandler (req, res) {
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function upsertStickerHandler(req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -39,6 +44,42 @@ async function upsertStickerHandler (req, res) {
   });
 }
 
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+async function stickerJsonHandler(req, res, next) {
+  let vanity = req.params['vanity'];
+  let sticker = await findStickerByVanity(vanity);
+  if (!sticker) {
+    console.log('Could not find', vanity)
+    next();
+  }
+  // Stickers don't carry much themselves.
+  let {artist_id} = sticker;
+  let artist = await findArtistById(artist_id);
+  let files = await findStickerFilesById(sticker.id);
+  let result = {
+    ...(artist ? {
+      artist: artist.vanity
+    } : {}),
+    // TODO tags
+    files: files.map((file) => {
+      let {size, content_type, source, length} = file
+      return {
+        size,
+        contentType: content_type,
+        url: `${baseUrl}/${source}`,
+        length
+      };
+    })
+  };
+  res.send(result);
+}
+
 module.exports = {
   upsertStickerHandler,
+  stickerJsonHandler,
 }

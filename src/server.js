@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const { checkSchema } = require('express-validator');
 const bearerToken = require('express-bearer-token');
 const app = express();
@@ -7,12 +8,13 @@ const {checkToken} = require('./token')
 const {artistSchema, stickerSchema, stickerFileSchema, stickerFilePathRegex} = require('./schemas');
 
 const {uploadStickerFileHandler, upsertStickerFileHandler, findStickerFileResourceHandler} = require('./handlers/stickerFileHandlers');
-const {upsertStickerHandler} = require('./handlers/stickerHandlers');
+const {upsertStickerHandler, stickerJsonHandler} = require('./handlers/stickerHandlers');
 const {upsertArtistHandler, allArtistsJsonHandler, artistJsonHandler} = require('./handlers/artistHandlers');
-const {allStickersJsonHandler, allStickersHtmlHandler} = require('./handlers/allStickersHandler');
+const {allStickersAndArtistsJsonHandler, allStickersHtmlHandler} = require('./handlers/allStickersHandler');
 
 app.use(express.json());
 app.use(bearerToken());
+app.use(compression())
 
 app.use(fileUpload({
   limits: {
@@ -25,12 +27,13 @@ app.set('view engine', 'pug')
 
 
 app.get('/', allStickersHtmlHandler);
-app.get('/.json', allStickersJsonHandler);
+app.get('/.json', allStickersAndArtistsJsonHandler);
 
 app.put('/artist', checkToken, checkSchema(artistSchema), upsertArtistHandler);
 app.get('/artist.json', allArtistsJsonHandler);
 app.get('/artist/:vanity.json', artistJsonHandler);
 app.put('/sticker', checkToken, checkSchema(stickerSchema), upsertStickerHandler);
+app.get('/sticker/:vanity.json', stickerJsonHandler);
 app.put('/sticker-file', checkToken, checkSchema(stickerFileSchema), upsertStickerFileHandler);
 // No schema, these are file uploads
 app.put(stickerFilePathRegex, checkToken, uploadStickerFileHandler);

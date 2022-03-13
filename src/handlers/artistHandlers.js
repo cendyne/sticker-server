@@ -40,14 +40,16 @@ async function allArtistsJsonHandler(req, res) {
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
  */
-async function artistJsonHandler(req, res) {
+async function artistJsonHandler(req, res, next) {
   let vanity = req.params['vanity'];
   let artist = await findArtistByVanity(vanity);
-  if (artist) {
-    let {name, href} = artist;
-    res.send({name, href})
+  if (!artist) {
+    next();
   }
+  let {name, href} = artist;
+  res.send({name, href});
 }
 
 module.exports = {

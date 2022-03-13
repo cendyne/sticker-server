@@ -367,6 +367,7 @@ async function uploadStickerFileHandler (req, res) {
   if (contentType) {
     res.setHeader('Content-Type', contentType);
   }
+  // TODO more cache headers?
   res.sendFile(fullPath, {
     // One hour for a file should be enough under normal circumstances
     maxAge: 3_600_000

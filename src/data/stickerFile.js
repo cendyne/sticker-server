@@ -24,6 +24,11 @@ async function findStickerFile(sticker_id, content_type, size) {
   debug('Could not find sticker file %d %s %d', sticker_id, content_type, size);
   return null;
 }
+async function findStickerFilesById(sticker_id) {
+  return await db('sticker_file').where({
+    sticker_id,
+  }).select('*');
+}
 
 async function updateStickerFile(id, source, length, md5) {
   let result = await db('sticker_file').returning('*').where('id', '=', id).update({
@@ -75,5 +80,6 @@ async function upsertStickerFile(sticker, content_type, size, source, length, md
 
 module.exports = {
   upsertStickerFile,
-  findStickerFile
+  findStickerFile,
+  findStickerFilesById,
 }

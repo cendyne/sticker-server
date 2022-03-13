@@ -68,4 +68,5 @@ module.exports = {
   findArtistByVanity,
   upsertArtist,
   findAllArtists,
+  findArtistById,
 }

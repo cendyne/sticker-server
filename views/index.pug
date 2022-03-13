@@ -26,8 +26,8 @@ html
                       media = '(min-width: 800px), (-webkit-min-device-pixel-ratio: 2) and (min-width: 600px)'
                     }
                   each source in sticker.sizes.get(size).sources
-                    source(type=source.content_type, srcset=`/${source.source}`, sizes=`${size}px`, media=`${media}`)
-                img(alt=sticker.vanity, src=`/${sticker.sizes.get(sticker.largest_size).primary.source}`, loading="lazy")
+                    source(type=source.content_type, srcset=`${baseUrl}/${source.source}`, sizes=`${size}px`, media=`${media}`)
+                img(alt=sticker.vanity, src=`${baseUrl}/${sticker.sizes.get(sticker.largest_size).primary.source}`, loading="lazy")
               .gallery-label= sticker.vanity
     script(src="main.js", type="application/javascript")
 

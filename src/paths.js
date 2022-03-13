@@ -13,7 +13,10 @@ if (filePath.startsWith('.')) {
 }
 console.log('File path:', filePath)
 
+const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
+
 module.exports = {
   filePath,
-  staticPath
+  staticPath,
+  baseUrl,
 }

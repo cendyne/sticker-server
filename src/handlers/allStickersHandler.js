@@ -1,6 +1,6 @@
 const debug = require('../debug');
+const {baseUrl} = require('../paths');
 const {findAllStickersAndFiles} = require('../data/allStickers');
-
 
 function organizeSizes(files, chooseFallback) {
   let sizes = new Map();
@@ -81,7 +81,8 @@ async function loadAllStickers() {
   }
   debug('Index results prepared')
   return {
-    artists: Object.values(artists)
+    artists: Object.values(artists),
+    baseUrl
   };
 }
 
@@ -101,7 +102,7 @@ async function allStickersHtmlHandler(req, res) {
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
-async function allStickersJsonHandler(req, res) {
+async function allStickersAndArtistsJsonHandler(req, res) {
   debug('Index json load all stickers with files');
   let results = await findAllStickersAndFiles();
   debug('Index json loaded');
@@ -135,6 +136,6 @@ async function allStickersJsonHandler(req, res) {
 }
 
 module.exports = {
-  allStickersJsonHandler,
+  allStickersAndArtistsJsonHandler,
   allStickersHtmlHandler
 }
