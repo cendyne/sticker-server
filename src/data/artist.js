@@ -21,6 +21,10 @@ async function findArtistById(id) {
   return null;
 }
 
+async function findAllArtists() {
+  return await db('artist').select('*');
+}
+
 async function updateArtist(id, name, href) {
   let result = await db('artist').where({id}).update({
     name,
@@ -63,4 +67,5 @@ async function upsertArtist(vanity, name, href) {
 module.exports = {
   findArtistByVanity,
   upsertArtist,
+  findAllArtists,
 }
