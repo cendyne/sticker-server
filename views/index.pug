@@ -25,9 +25,9 @@ html
                     } else if (size >= 64) {
                       media = '(min-width: 800px), (-webkit-min-device-pixel-ratio: 2) and (min-width: 600px)'
                     }
-                  each source in sticker.sizes[size].sources
+                  each source in sticker.sizes.get(size).sources
                     source(type=source.content_type, srcset=`/${source.source}`, sizes=`${size}px`, media=`${media}`)
-                img(alt=sticker.vanity, src=`/${sticker.sizes[sticker.largest_size].primary.source}`, loading="lazy")
+                img(alt=sticker.vanity, src=`/${sticker.sizes.get(sticker.largest_size).primary.source}`, loading="lazy")
               .gallery-label= sticker.vanity
     script(src="main.js", type="application/javascript")
 

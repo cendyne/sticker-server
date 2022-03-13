@@ -1,64 +1,30 @@
-const {findAllStickers, findAllStickersAndFiles} = require('../data/allStickers');
-/**
- *
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- */
-async function allStickersJsonHandler(req, res) {
-  let results = await findAllStickers();
-  let response = [];
-  for (const {artist_name, artist_vanity, artist_href, sticker_vanity} of results) {
-    // TODO tags
-    response.push({artist_name, artist_vanity, artist_href, sticker_vanity})
-  }
-  res.send({
-    stickers: response
-  })
-}
+const debug = require('../debug');
+const {findAllStickersAndFiles} = require('../data/allStickers');
 
-/**
- *
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- */
-async function allStickersHtmlHandler(req, res) {
-  let results = await findAllStickersAndFiles();
-  let artists = {};
-  for (const result of results) {
-    let artist = artists[result.artist_id];
-    if (!artist) {
-      artist = {
-        stickers: [],
-        name: result.artist_name,
-        vanity: result.artist_vanity,
-        href: result.artist_href,
+
+function organizeSizes(files, chooseFallback) {
+  let sizes = new Map();
+  for (const file of files) {
+    const {size, content_type, source, length} = file;
+    let sizeSet = sizes.get(size);
+    if (!sizeSet) {
+      sizeSet = {
+        files: [],
       };
-      artists[result.artist_id] = artist;
+      if (chooseFallback) {
+        sizeSet.primary = null;
+      }
+      sizes.set(size, sizeSet)
     }
-    stickers = artist.stickers;
-    let sizes = {};
-    let largest_size = 0;
-    for (const file of result.files) {
-      const {size, content_type, source, length} = file;
-      if (size > largest_size ) {
-        largest_size = size;
-      }
-      let sizeSet = sizes[size];
-      if (!sizeSet) {
-        sizeSet = {
-          files: [],
-          primary: null,
-        };
-        sizes[size] = sizeSet;
-      }
-      sizeSet.files.push(file);
+    sizeSet.files.push(file);
+  }
+  for (const size of sizes.keys()) {
+    let contentTypes = new Map();
+    const matchingSizeSet = sizes.get(size);
+    for (const file of matchingSizeSet.files) {
+      contentTypes.set(file.content_type, file);
     }
-    for (const size of Object.keys(sizes)) {
-      let contentTypes = new Map();
-      const matchingSizeSet = sizes[size];
-      for (const file of matchingSizeSet.files) {
-        contentTypes.set(file.content_type, file);
-      }
+    if (chooseFallback) {
       if (contentTypes.has('image/jpeg')) {
         matchingSizeSet.primary = contentTypes.get('image/jpeg');
         contentTypes.delete('image/jpeg');
@@ -74,23 +40,98 @@ async function allStickersHtmlHandler(req, res) {
         matchingSizeSet.primary = contentTypes.get(contentType);
         contentTypes.delete(contentType);
       }
-      let remainingFiles = [];
-      for (const file of contentTypes.values()) {
-        remainingFiles.push(file);
-      }
-      remainingFiles.sort((a, b) => (a.length < b.length) ? -1 : 1);
-      matchingSizeSet.sources = remainingFiles;
-      delete matchingSizeSet.files;
     }
+
+    let remainingFiles = [];
+    for (const {content_type, source, length} of contentTypes.values()) {
+      remainingFiles.push({content_type, source, length});
+    }
+    remainingFiles.sort((a, b) => (a.length < b.length) ? -1 : 1);
+    matchingSizeSet.sources = remainingFiles;
+    delete matchingSizeSet.files;
+  }
+  return sizes;
+}
+
+async function loadAllStickers() {
+  debug('Index load all stickers with files');
+  let results = await findAllStickersAndFiles();
+  debug('Index prepare results');
+  let artists = {};
+  for (const result of results) {
+    let artist = artists[result.artist_id];
+    if (!artist) {
+      artist = {
+        stickers: [],
+        name: result.artist_name,
+        vanity: result.artist_vanity,
+        href: result.artist_href,
+      };
+      artists[result.artist_id] = artist;
+    }
+    stickers = artist.stickers;
+    let sizes = organizeSizes(result.files, true);
+    let available_sizes = [...sizes.keys()].map((n) => parseInt(n)).sort((a, b) => a > b ? -1 : 1)
     stickers.push({
       vanity: result.sticker_vanity,
       sizes,
-      available_sizes: Object.keys(sizes).map((n) => parseInt(n)).sort((a, b) => a > b ? -1 : 1),
-      largest_size
+      available_sizes,
+      largest_size: available_sizes.slice(-1)[0]
     })
   }
+  debug('Index results prepared')
+  return {
+    artists: Object.values(artists)
+  };
+}
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function allStickersHtmlHandler(req, res) {
+  let data = await loadAllStickers();
   // res.json({artists: Object.values(artists)})
-  res.render('index', {artists: Object.values(artists)})
+  res.render('index', data)
+}
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+async function allStickersJsonHandler(req, res) {
+  debug('Index json load all stickers with files');
+  let results = await findAllStickersAndFiles();
+  debug('Index json loaded');
+  let stickers = {};
+  let artists = {};
+  for (const {artist_name, artist_vanity, artist_href, sticker_vanity, files} of results) {
+    // TODO tags
+    let sizes = organizeSizes(files, false);
+    let sizeObj = {};
+    for (let size of sizes.keys()) {
+      let sizeMap = sizes.get(size);
+      size = parseInt(size);
+      if (size <= 32) {
+        // Seems superfluous
+        continue;
+      }
+      let sizeResult = [];
+      for (let {content_type} of sizeMap.sources) {
+        sizeResult.push(content_type);
+      }
+      sizeObj[size] = sizeResult;
+    }
+    stickers[sticker_vanity] = {artist: artist_vanity, sizes: sizeObj};
+    artists[artist_vanity] = {artist_name, artist_href};
+  }
+  debug('Index json response prepared');
+  res.send({
+    stickers,
+    artists
+  })
 }
 
 module.exports = {
