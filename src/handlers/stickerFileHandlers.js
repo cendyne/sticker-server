@@ -363,6 +363,10 @@ async function uploadStickerFileHandler (req, res) {
 
   let fullPath = `${filePath}/${filePathSize}/${filePathVanity}.${filePathExt}`;
 
+  let contentType = extensionToContentType(filePathExt);
+  if (contentType) {
+    res.setHeader('Content-Type', contentType);
+  }
   res.sendFile(fullPath, {
     // One hour for a file should be enough under normal circumstances
     maxAge: 3_600_000
