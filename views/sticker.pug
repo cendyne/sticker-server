@@ -18,7 +18,7 @@ html
         picture
           each source in sources
             source(type=source.contentType, srcset=source.url)
-          img(alt=vanity, src=`${baseUrl}/${fallbackSource.url}`)
+          img(alt=vanity, src=`${fallbackSource.url}`)
         .single-label
           // Have to have a space here
           =`${vanity} by `
