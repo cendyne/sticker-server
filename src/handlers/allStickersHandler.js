@@ -120,7 +120,7 @@ async function allStickersJsonHandler(req, res) {
       }
       let sizeResult = [];
       for (let {content_type} of sizeMap.sources) {
-        sizeResult.push(content_type);
+        sizeResult.push(content_type.split('/')[1]);
       }
       sizeObj[size] = sizeResult;
     }
