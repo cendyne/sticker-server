@@ -65,7 +65,7 @@ async function loadAllStickers() {
         stickers: [],
         name: result.artist_name,
         vanity: result.artist_vanity,
-        href: result.artist_href,
+        href: `${baseUrl}/artist/${result.artist_vanity}`,
       };
       artists[result.artist_id] = artist;
     }

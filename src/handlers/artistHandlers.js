@@ -1,3 +1,5 @@
+const debug = require('../debug');
+const { baseUrl } = require('../paths');
 const {validationResult} = require('express-validator');
 const {upsertArtist, findAllArtists, findArtistByVanity} = require('../data/artist');
 
@@ -46,14 +48,45 @@ async function artistJsonHandler(req, res, next) {
   let vanity = req.params['vanity'];
   let artist = await findArtistByVanity(vanity);
   if (!artist) {
+    debug('Could not find artist %s', vanity);
     next();
+    return;
   }
   let {name, href} = artist;
   res.send({name, href});
+}
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+ async function artistHtmlHandler(req, res, next) {
+  let vanity = req.params['vanity'];
+  let artist = await findArtistByVanity(vanity);
+  if (!artist) {
+    debug('Could not find artist %s', vanity);
+    next();
+    return;
+
+  }
+  let {name, href} = artist;
+  let jsonUrl = `${baseUrl}/artist/${vanity}.json`;
+
+  let data = {
+    vanity,
+    name,
+    href,
+    baseUrl,
+    jsonUrl,
+  };
+  res.render('artist', data)
 }
 
 module.exports = {
   upsertArtistHandler,
   allArtistsJsonHandler,
   artistJsonHandler,
+  artistHtmlHandler,
 }

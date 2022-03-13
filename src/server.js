@@ -9,7 +9,7 @@ const {artistSchema, stickerSchema, stickerFileSchema, stickerFilePathRegex} = r
 
 const {uploadStickerFileHandler, upsertStickerFileHandler, findStickerFileResourceHandler} = require('./handlers/stickerFileHandlers');
 const {upsertStickerHandler, stickerJsonHandler, stickerHtmlHandler} = require('./handlers/stickerHandlers');
-const {upsertArtistHandler, allArtistsJsonHandler, artistJsonHandler} = require('./handlers/artistHandlers');
+const {upsertArtistHandler, allArtistsJsonHandler, artistJsonHandler, artistHtmlHandler} = require('./handlers/artistHandlers');
 const {allStickersAndArtistsJsonHandler, allStickersHtmlHandler} = require('./handlers/allStickersHandler');
 
 app.use(express.json());
@@ -31,6 +31,7 @@ app.get('/.json', allStickersAndArtistsJsonHandler);
 
 app.put('/artist', checkToken, checkSchema(artistSchema), upsertArtistHandler);
 app.get('/artist.json', allArtistsJsonHandler);
+app.get('/artist/:vanity', artistHtmlHandler);
 app.get('/artist/:vanity.json', artistJsonHandler);
 app.put('/sticker', checkToken, checkSchema(stickerSchema), upsertStickerHandler);
 app.get('/sticker/:vanity', stickerHtmlHandler);

@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title=`${name}`
+    link(rel="stylesheet", href=`${baseUrl}/dejavu-fonts/regular.css`)
+    link(rel="stylesheet", href=`${baseUrl}/main.css`)
+    meta(name="viewport", content="width=device-width")
+    meta(property="og:type", content="website")
+    meta(property="og:description", content=`${name}`)
+    meta(property="og:title", content=`${name}`)
+    meta(name="theme-color", content="#deb836")
+  body
+    .single-container
+      .single-item
+        .single-label
+          a(href=href)=name
+        .single-other
+          a(href=jsonUrl)=`${vanity}.json`
+    script(src=`${baseUrl}/single.js`, type="application/javascript")
+
