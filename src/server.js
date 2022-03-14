@@ -28,6 +28,7 @@ app.set('view engine', 'pug')
 
 app.get('/', allStickersHtmlHandler);
 app.get('/.json', allStickersAndArtistsJsonHandler);
+app.get('/json', allStickersAndArtistsJsonHandler);
 
 app.put('/artist', checkToken, checkSchema(artistSchema), upsertArtistHandler);
 app.get('/artist.json', allArtistsJsonHandler);

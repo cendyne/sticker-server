@@ -33,7 +33,7 @@ async function allArtistsJsonHandler(req, res) {
   let artistsRows = await findAllArtists();
   let artists = {};
   for (let {name, vanity, href} of artistsRows) {
-    artists[vanity] = {name, href};
+    artists[vanity] = {name, url: href};
   }
   res.send(artists);
 }

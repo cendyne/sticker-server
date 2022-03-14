@@ -32,5 +32,9 @@ html
                 img(alt=sticker.vanity, src=`${baseUrl}/${sticker.sizes.get(sticker.largest_size).primary.source}`, loading="lazy")
               .gallery-label
                 a(href=sticker.url)=sticker.vanity
+    .single-container
+      .single-item
+        .single-other
+          a(href=jsonUrl) json
     script(src=`${baseUrl}/main.js`, type="application/javascript")
 

@@ -2,6 +2,12 @@ const debug = require('../debug');
 const {baseUrl} = require('../paths');
 const {findAllStickersAndFiles} = require('../data/allStickers');
 
+/**
+ *
+ * @param {*} files
+ * @param {*} chooseFallback
+ * @returns {Map<number, any>}
+ */
 function organizeSizes(files, chooseFallback) {
   let sizes = new Map();
   for (const file of files) {
@@ -78,7 +84,7 @@ async function loadAllStickers() {
       available_sizes,
       largest_size: available_sizes.slice(-1)[0],
       url: `${baseUrl}/sticker/${result.sticker_vanity}`
-    })
+    });
   }
   debug('Index results prepared')
   return {
@@ -95,7 +101,10 @@ async function loadAllStickers() {
 async function allStickersHtmlHandler(req, res) {
   let data = await loadAllStickers();
   // res.json({artists: Object.values(artists)})
-  res.render('index', data)
+  res.render('index', {
+    ...data,
+    jsonUrl: `${baseUrl}/json`,
+  })
 }
 
 /**
@@ -104,6 +113,10 @@ async function allStickersHtmlHandler(req, res) {
  * @param {import('express').Response} res
  */
 async function allStickersAndArtistsJsonHandler(req, res) {
+  let withLinks = false;
+  if (req.query['withLinks']) {
+    withLinks = req.query['withLinks'] == 'true';
+  }
   debug('Index json load all stickers with files');
   let results = await findAllStickersAndFiles();
   debug('Index json loaded');
@@ -113,6 +126,11 @@ async function allStickersAndArtistsJsonHandler(req, res) {
     // TODO tags
     let sizes = organizeSizes(files, false);
     let sizeObj = {};
+    let extra = {};
+    let sources = [];
+    if (withLinks) {
+      extra.sources = sources;
+    }
     for (let size of sizes.keys()) {
       let sizeMap = sizes.get(size);
       size = parseInt(size);
@@ -125,14 +143,31 @@ async function allStickersAndArtistsJsonHandler(req, res) {
         sizeResult.push(content_type.split('/')[1]);
       }
       sizeObj[size] = sizeResult;
+      if (withLinks) {
+        for (const {content_type, source} of sizeMap.sources)  {
+          sources.push({
+            contentType: content_type,
+            size,
+            url: `${baseUrl}/${source}`
+          });
+        }
+      }
     }
-    stickers[sticker_vanity] = {artist: artist_vanity, sizes: sizeObj};
-    artists[artist_vanity] = {artist_name, artist_href};
+    stickers[sticker_vanity] = {
+      artist: artist_vanity,
+      sizes: sizeObj,
+      ...extra,
+    };
+    artists[artist_vanity] = {name: artist_name, url: artist_href};
   }
   debug('Index json response prepared');
   res.send({
     stickers,
-    artists
+    artists,
+    links: {
+      withLinks: `${baseUrl}/json?withLinks=true`,
+      small: `${baseUrl}/json`
+    }
   })
 }
 
