@@ -366,6 +366,8 @@ async function uploadStickerFileHandler (req, res) {
   let contentType = extensionToContentType(filePathExt);
   if (contentType) {
     res.setHeader('Content-Type', contentType);
+  } else {
+    debug('No content type for extension? %s', filePathExt);
   }
   // TODO more cache headers?
   res.sendFile(fullPath, {

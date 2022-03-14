@@ -45,6 +45,9 @@ app.post(stickerFilePathRegex, checkToken, uploadStickerFileHandler);
 // Send sticker files back
 app.get(stickerFilePathRegex, findStickerFileResourceHandler);
 
+express.static.mime.define({'image/avif': ['avif']});
+express.static.mime.define({'image/jxl': ['jxl']});
+
 app.use(express.static('static'))
 
 module.exports = app
