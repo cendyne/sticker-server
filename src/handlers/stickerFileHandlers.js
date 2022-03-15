@@ -105,7 +105,7 @@ async function upsertStickerFileHandler (req, res) {
   if (source.startsWith('/')) {
     source = source.substring(1); // Drop the initial slash
   }
-  console.log({content_type, source, size, sticker_vanity});
+  // console.log({content_type, source, size, sticker_vanity});
   let result = null; // TODO refactor until first use
   let sticker = await findStickerByVanity(sticker_vanity);
   if (!sticker) {
@@ -167,9 +167,9 @@ async function upsertStickerFileHandler (req, res) {
   let md5 = null;
   let length = null;
   try {
-    console.log(`checking that ${fullPath} exists`)
+    // console.log(`checking that ${fullPath} exists`)
     let stat = await fs.promises.stat(fullPath);
-    console.log('stat', stat);
+    // console.log('stat', stat);
     length = stat.size;
   } catch (e) {
     return res.status(400).json({ errors: [
@@ -235,7 +235,7 @@ async function uploadStickerFileHandler (req, res) {
 
   // TODO verify that the entity exists
 
-  console.log({source});
+  // console.log({source});
   if (!req.files) {
     return res.status(400).json({ errors: [
       {
@@ -246,7 +246,7 @@ async function uploadStickerFileHandler (req, res) {
       }
     ]});
   }
-  console.log(req.files);
+  // console.log(req.files);
   let keys = Object.keys(req.files);
   if (keys.length != 1) {
     return res.status(400).json({ errors: [

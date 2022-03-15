@@ -18,9 +18,9 @@ const artistSchema = {
   }
 };
 
-const stickerFilePathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-+]{3,}\.(gif|avif|jpe?g|png|webp|jxl|svg)/;
-const stickerFileInfoPathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-+]{3,}\.json/;
-const stickerInfoPathRegex = /\/?sticker\/[a-z0-9_\-+]{3,}\.json/
+const stickerFilePathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-+]+\.(gif|avif|jpe?g|png|webp|jxl|svg)/;
+const stickerFileInfoPathRegex = /\/?file\/[0-9]{2,4}\/[a-z0-9_\-+]+\.json/;
+const stickerInfoPathRegex = /\/?sticker\/[a-z0-9_\-+]+\.json/
 const fileRegex = /file\/([^/]+)\/([^.]+)\.(gif|avif|jpe?g|png|webp|jxl|svg)/;
 
 const stickerFileSchema = {
