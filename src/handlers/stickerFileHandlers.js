@@ -369,10 +369,9 @@ async function uploadStickerFileHandler (req, res) {
   } else {
     debug('No content type for extension? %s', filePathExt);
   }
-  // TODO more cache headers?
   res.sendFile(fullPath, {
-    // One hour for a file should be enough under normal circumstances
-    maxAge: 3_600_000
+    // One day
+    maxAge: 86_400_000
   }, async (err) => {
     if (err) {
       return await notFoundHandler(filePathExt, res, next);
